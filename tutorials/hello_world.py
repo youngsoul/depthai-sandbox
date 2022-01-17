@@ -2,7 +2,6 @@ import numpy as np  # numpy - manipulate the packet data returned by depthai
 import cv2  # opencv - display the video stream
 import depthai  # depthai - access the camera and its data packets
 import blobconverter  # blobconverter - compile and download MyriadX neural network blobs
-import depthai.ImgDetections
 
 """
 https://docs.luxonis.com/projects/api/en/latest/tutorials/hello_world/
@@ -80,6 +79,9 @@ def main():
                     # draw the bounding box
                     bbox = frame_normalize(frame, (detection.xmin, detection.ymin, detection.xmax, detection.ymax))
 
+                    # draw the detected bounding box
+                    cv2.rectangle(frame, (bbox[0], bbox[1]), (bbox[2], bbox[3]), (255, 0, 0), 2)
+
                     # draw the prediction label
                     cv2.putText(frame, labelMap[detection.label], (bbox[0] + 10, bbox[1] + 20),
                                 cv2.FONT_HERSHEY_TRIPLEX, 0.5, text_color)
@@ -87,8 +89,6 @@ def main():
                     # draw the prediction confidence
                     cv2.putText(frame, f"{int(detection.confidence * 100)}%", (bbox[0] + 10, bbox[1] + 40),
                                 cv2.FONT_HERSHEY_TRIPLEX, 0.5, text_color)
-                    # draw the detected bounding box
-                    cv2.rectangle(frame, (bbox[0], bbox[1]), (bbox[2], bbox[3]), (255, 0, 0), 2)
 
                 # Show the frame from the OAK device with the detections
                 cv2.imshow("MobileNetDetections", frame)
