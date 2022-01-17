@@ -26,6 +26,14 @@ pip install numpy opencv-python depthai blobconverter
 
 ## RaspberryPI
 
+If you have setup OpenCV on the RaspberryPI then you should only need to install the following in the cv2 environment:
+
+Use [this script](https://github.com/youngsoul/rpi_opencv_install/blob/master/pi_install_imagelibs.sh) to install OpenCV along with image libraries. 
+
+```shell
+pip install depthai blobconverter
+```
+
 [Luxonis RaspberryPI Setup](https://docs.luxonis.com/projects/api/en/latest/install/#raspberry-pi-os)
 
 If you get an error like:
@@ -45,3 +53,11 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 ```
 
 * Plug the OAK device back into USB3 slot
+
+If you system still not work, run the folllowing:
+
+```shell
+sudo curl -fL https://docs.luxonis.com/install_dependencies.sh | bash
+```
+From [Luxonis RaspberryPI Setup](https://docs.luxonis.com/projects/api/en/latest/install/#raspberry-pi-os)
+

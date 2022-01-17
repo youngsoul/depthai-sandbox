@@ -5,7 +5,18 @@ import blobconverter  # blobconverter - compile and download MyriadX neural netw
 
 """
 https://docs.luxonis.com/projects/api/en/latest/tutorials/hello_world/
+
+Also used information from this example to pull the labels and label detections
+https://docs.luxonis.com/projects/api/en/latest/samples/MobileNet/rgb_mobilenet/#rgb-mobilenetssd
+
 """
+
+# MobilenetSSD label texts
+labelMap = ["background", "aeroplane", "bicycle", "bird", "boat", "bottle", "bus", "car", "cat", "chair", "cow",
+            "diningtable", "dog", "horse", "motorbike", "person", "pottedplant", "sheep", "sofa", "train", "tvmonitor"]
+
+text_color = (255, 0, 0)
+
 def frameNorm(frame, bbox):
     normVals = np.full(len(bbox), frame.shape[0])
     normVals[::2] = frame.shape[1]
@@ -64,6 +75,12 @@ def main():
             if frame is not None:
                 for detection in detections:
                     bbox = frameNorm(frame, (detection.xmin, detection.ymin, detection.xmax, detection.ymax))
+
+                    cv2.putText(frame, labelMap[detection.label], (bbox[0] + 10, bbox[1] + 20),
+                                cv2.FONT_HERSHEY_TRIPLEX, 0.5, text_color)
+                    cv2.putText(frame, f"{int(detection.confidence * 100)}%", (bbox[0] + 10, bbox[1] + 40),
+                                cv2.FONT_HERSHEY_TRIPLEX, 0.5, text_color)
+
                     cv2.rectangle(frame, (bbox[0], bbox[1]), (bbox[2], bbox[3]), (255, 0, 0), 2)
                 cv2.imshow("preview", frame)
 
