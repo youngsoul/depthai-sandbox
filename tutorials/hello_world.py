@@ -2,6 +2,7 @@ import numpy as np  # numpy - manipulate the packet data returned by depthai
 import cv2  # opencv - display the video stream
 import depthai  # depthai - access the camera and its data packets
 import blobconverter  # blobconverter - compile and download MyriadX neural network blobs
+import depthai.ImgDetections
 
 """
 https://docs.luxonis.com/projects/api/en/latest/tutorials/hello_world/
@@ -17,17 +18,19 @@ labelMap = ["background", "aeroplane", "bicycle", "bird", "boat", "bottle", "bus
 
 text_color = (255, 0, 0)
 
-def frameNorm(frame, bbox):
+
+def frame_normalize(frame, bbox):
     normVals = np.full(len(bbox), frame.shape[0])
     normVals[::2] = frame.shape[1]
     return (np.clip(np.array(bbox), 0, 1) * normVals).astype(int)
+
 
 def main():
     pipeline = depthai.Pipeline()
 
     # Create ColorCamera Node
     cam_rgb = pipeline.create(depthai.node.ColorCamera)
-    cam_rgb.setPreviewSize(300,300)
+    cam_rgb.setPreviewSize(300, 300)
     cam_rgb.setInterleaved(False)
 
     # Create MobileNetDetectionNetwork Node
@@ -37,7 +40,7 @@ def main():
     detection_nn.setBlobPath(blobconverter.from_zoo(name='mobilenet-ssd', shaves=6))
     detection_nn.setConfidenceThreshold(0.5)
 
-    # connect the ColorCamera output to the MobileNet input
+    # connect the ColorCamera preview output to the MobileNet input
     cam_rgb.preview.link(detection_nn.input)
 
     # Create XLinkOut nodes to send data to host for the camera
@@ -74,18 +77,25 @@ def main():
 
             if frame is not None:
                 for detection in detections:
-                    bbox = frameNorm(frame, (detection.xmin, detection.ymin, detection.xmax, detection.ymax))
+                    # draw the bounding box
+                    bbox = frame_normalize(frame, (detection.xmin, detection.ymin, detection.xmax, detection.ymax))
 
+                    # draw the prediction label
                     cv2.putText(frame, labelMap[detection.label], (bbox[0] + 10, bbox[1] + 20),
                                 cv2.FONT_HERSHEY_TRIPLEX, 0.5, text_color)
+
+                    # draw the prediction confidence
                     cv2.putText(frame, f"{int(detection.confidence * 100)}%", (bbox[0] + 10, bbox[1] + 40),
                                 cv2.FONT_HERSHEY_TRIPLEX, 0.5, text_color)
-
+                    # draw the detected bounding box
                     cv2.rectangle(frame, (bbox[0], bbox[1]), (bbox[2], bbox[3]), (255, 0, 0), 2)
-                cv2.imshow("preview", frame)
+
+                # Show the frame from the OAK device with the detections
+                cv2.imshow("MobileNetDetections", frame)
 
             if cv2.waitKey(1) == ord('q'):
                 break
+
 
 if __name__ == "__main__":
     main()
