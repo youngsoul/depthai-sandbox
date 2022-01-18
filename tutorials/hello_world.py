@@ -12,13 +12,16 @@ https://docs.luxonis.com/projects/api/en/latest/samples/MobileNet/rgb_mobilenet/
 """
 
 # MobilenetSSD label texts
-labelMap = ["background", "aeroplane", "bicycle", "bird", "boat", "bottle", "bus", "car", "cat", "chair", "cow",
-            "diningtable", "dog", "horse", "motorbike", "person", "pottedplant", "sheep", "sofa", "train", "tvmonitor"]
+labelMap = ["background", "aeroplane", "bicycle", "bird", "boat", "bottle", "bus",
+            "car", "cat", "chair", "cow",
+            "diningtable", "dog", "horse", "motorbike", "person", "pottedplant",
+            "sheep", "sofa", "train", "tvmonitor"]
 
+# color for label text and confidence in BGR order
 text_color = (255, 0, 0)
 
 
-def frame_normalize(frame, bbox):
+def box_denormalize(frame, bbox):
     normVals = np.full(len(bbox), frame.shape[0])
     normVals[::2] = frame.shape[1]
     return (np.clip(np.array(bbox), 0, 1) * normVals).astype(int)
@@ -77,7 +80,7 @@ def main():
             if frame is not None:
                 for detection in detections:
                     # draw the bounding box
-                    bbox = frame_normalize(frame, (detection.xmin, detection.ymin, detection.xmax, detection.ymax))
+                    bbox = box_denormalize(frame, (detection.xmin, detection.ymin, detection.xmax, detection.ymax))
 
                     # draw the detected bounding box
                     cv2.rectangle(frame, (bbox[0], bbox[1]), (bbox[2], bbox[3]), (255, 0, 0), 2)
