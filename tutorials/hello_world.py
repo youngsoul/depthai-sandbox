@@ -4,6 +4,29 @@ import depthai  # depthai - access the camera and its data packets
 import blobconverter  # blobconverter - compile and download MyriadX neural network blobs
 
 """
+Online tool to convert models:
+https://github.com/luxonis/blobconverter/tree/master/cli
+
+
+depthai model zoo: https://github.com/luxonis/depthai-model-zoo
+
+https://docs.luxonis.com/projects/api/en/latest/components/nodes/neural_network/
+
+https://blobconverter.luxonis.com
+https://blobconverter.luxonis.com/zoo_models?version=2021.4
+
+to see a list of models, on command line:
+
+blobconverter --zoo-list
+
+
+Here is Github link to NN with size and labels
+https://github.com/luxonis/depthai/tree/main/resources/nn
+
+
+"""
+
+"""
 https://docs.luxonis.com/projects/api/en/latest/tutorials/hello_world/
 
 Also used information from this example to pull the labels and label detections
@@ -33,12 +56,17 @@ def main():
     # Create ColorCamera Node
     cam_rgb = pipeline.create(depthai.node.ColorCamera)
     cam_rgb.setPreviewSize(300, 300)
+    # cam_rgb.setPreviewSize(416,416)
     cam_rgb.setInterleaved(False)
 
     # Create MobileNetDetectionNetwork Node
     detection_nn = pipeline.create(depthai.node.MobileNetDetectionNetwork)
     # Set path of the blob (NN model). We will use blobconverter to convert&download the model
-    # detection_nn.setBlobPath("/path/to/model.blob")
+    # to see the collection of models in the zoo
+    # https://github.com/luxonis/depthai/tree/main/resources/nn
+    # tiny_yolo_path = '/Users/patrickryan/.cache/blobconverter/tiny-yolo-v3_openvino_2021.4_6shave.blob'
+    # image size is 416x416
+    # detection_nn.setBlobPath(tiny_yolo_path)
     detection_nn.setBlobPath(blobconverter.from_zoo(name='mobilenet-ssd', shaves=6))
     detection_nn.setConfidenceThreshold(0.5)
 
