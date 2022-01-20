@@ -3,6 +3,17 @@
 
 ## Background Information
 
+### YouTube Videos
+
+[Hello World](https://youtu.be/iUNQPspeUA8)
+
+[Video Feed](https://youtu.be/DbgX7gQa304)
+
+### Medium Posts
+
+[Post1](https://patrick-ryan.medium.com/walk-through-of-opencv-ai-kit-using-the-mobilenet-detection-algorithm-fdbfe9531e54)
+
+[Post 2](https://patrick-ryan.medium.com/the-opencv-ai-kit-oak-super-simple-video-streamer-starter-fff707630f16)
 
 ### Pipelines
 
