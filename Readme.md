@@ -25,7 +25,7 @@ To get DepthAI up and running, you have to create a pipeline, populate it with n
 ## Install Libraries
 
 ```shell
-pip install numpy opencv-python depthai blobconverter
+pip install numpy opencv-python depthai blobconverter imutils
 ```
 
 
