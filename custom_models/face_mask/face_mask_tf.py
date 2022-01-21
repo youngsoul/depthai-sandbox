@@ -13,7 +13,7 @@ def main():
     # 600x600 is this size of the image that will be displayed
     # however, the model assumes a 224x224 so we will add an ImageManip Node
     # to resize the preview image BEFORE it goes to the model
-    cam_rgb.setPreviewSize(600, 600)
+    cam_rgb.setPreviewSize(400, 400)
     # we are not going to set the color order, because in the OpenVino Model Optimizer we specified
     # the --reverse_input_channels so the resulting image will convert from BGR (OpenCV Format) to
     # RGB which the model expects.  If you did not use that option then you would need to setColorOrder
@@ -53,7 +53,7 @@ def main():
     # connect neural network to XLinkOut
     custom_nn.out.link(xout_nn.input)
 
-    display_label = DisplayValueLabel(50, 50, 300, 75, 'Mask?: ')
+    display_label = DisplayValueLabel(10, 10, 275, 40, 'Mask?: ')
 
     # get the virtual device, and loop forever reading messages
     # from the internal queue
@@ -87,7 +87,7 @@ def main():
                 mask, no_mask = in_nn.getLayerFp16('StatefulPartitionedCall/model/dense_1/Softmax')
                 # print the results of the prediction
                 print(f"Mask[{round(mask,1)}], No Mask[{round(no_mask,1)}]")
-                if round(mask,1) > 0.7:
+                if round(mask,1) > round(no_mask,1):
                     display_label.set_value("MASK")
                 else:
                     display_label.set_value("NO MASK")
