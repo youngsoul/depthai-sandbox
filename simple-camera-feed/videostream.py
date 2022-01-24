@@ -1,4 +1,4 @@
-import cv2  # opencv - display the video stream
+import cv2  # opencv - display the videos stream
 import depthai  # depthai - access the camera and its data packets
 
 def main():

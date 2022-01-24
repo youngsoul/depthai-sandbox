@@ -1,6 +1,6 @@
 import sys
 sys.path.insert(0,'../..')
-import cv2  # opencv - display the video stream
+import cv2  # opencv - display the videos stream
 import depthai  # depthai - access the camera and its data packets
 from uielements.uielements import DisplayValueLabel
 
